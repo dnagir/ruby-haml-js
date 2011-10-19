@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = ["dnagir@gmail.com"]
   s.homepage    = "http://github.com/dnagir/ruby-haml-js"
   s.summary     = %q{Precompile HAML-JS templates with or without Rails 3.1 assets pipeline}
-  s.description = %q{ruby-haml-js provides a Tilt template that you can use to compile HAML-JS templates into JS functions. Handy for using it wth Bakcbone.js, Spine.js etc.}
+  s.description = %q{ruby-haml-js provides a Tilt template that you can use on the server side to compile HAML-JS templates. Handy for using it wth Bakcbone.js, Spine.js etc.}
 
   s.rubyforge_project = "ruby-haml-js"
 
