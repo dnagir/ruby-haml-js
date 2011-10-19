@@ -1,0 +1,3 @@
+%h3 This is the sample from template that has current time dynamic time stamp
+.time= time
+

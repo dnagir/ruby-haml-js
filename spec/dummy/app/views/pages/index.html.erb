@@ -1,0 +1,29 @@
+<h1>Samples</h1>
+
+<h2>HAML template</h2>
+<button id='haml-update'>Update template</button>
+<div id='haml-placeholder'> </div>
+
+<p>
+  The compiled sample HAML template is <a href='<%= asset_path 'sample.js' %>'>here</a>.
+</p>
+
+<% 
+[
+  'colorpicker.js', 'colorpicker.css',
+  'jquery.js', 'jquery-ui.js' 'jquery-ui/pack/dialog.js', 
+  'fileuploader.js', 'fileuploader.css', 'fileuploader/loading.gif',
+  'innershiv.js',
+  'jquery.form.js',
+  'haml/haml-foo-bar.js'
+].each do |asset| 
+
+%>
+  <% path = asset_path "pakunok/#{asset}"%>
+  <p>
+    <a href="<%= path %>">
+      <%= path %>
+    </a>
+  </p>
+<% end%>
+
