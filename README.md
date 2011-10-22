@@ -4,7 +4,7 @@ Precompiles the HAML-JS templates into a function.
 
 This can be used as a standalone template or as part of Rails 3.1 assets pipeline.
 
-For example, if you have a file `app/assets/javascripts/template/comment.jst.hamljs` with the following content:
+For example, if you have a file `app/assets/javascripts/templates/comment.jst.hamljs` with the following content:
 
 ```haml
 .comment
@@ -19,7 +19,7 @@ And the result will look like this:
 ```javascript
 (function() {
   this.JST || (this.JST = {});
-  this.JST["sample"] = function (locals) { function html_escape(text) {
+  this.JST["templates/comment"] = function (locals) { function html_escape(text) {
       return (text + "").
         replace(/&/g, "&amp;").
         replace(/</g, "&lt;").
@@ -44,7 +44,7 @@ And the result will look like this:
 Then you access that template like so:
 
 ```javascript
-var commentView = JST['template/comment'];
+var commentView = JST['templates/comment'];
 // ...
 // Somewhere in your code later:
 var html = commentView({author: 'Dima', text: 'Looks nice'});
