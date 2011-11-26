@@ -31,6 +31,7 @@ module RubyHamlJs
 
     def compile_to_function
       function = ExecJS.
+        compime(self.class.underscore_source).
         compile(self.class.haml_source).
         eval "Haml('#{js_string data}', {escapeHtmlByDefault: true, customEscape: #{js_custom_escape}}).toString()"
       # make sure function is annonymous
@@ -53,6 +54,11 @@ module RubyHamlJs
       def haml_source
         # Haml source is an asset
         @haml_source ||= IO.read File.expand_path('../../../vendor/assets/javascripts/haml.js', __FILE__) 
+      end
+      
+      def underscore_source
+        # Haml source is an asset
+        @underscore_source ||= IO.read File.expand_path('../../../vendor/assets/javascripts/underscore_source.js', __FILE__) 
       end
     end
 
