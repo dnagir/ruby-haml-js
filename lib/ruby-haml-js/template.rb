@@ -44,16 +44,18 @@ module RubyHamlJs
     end
 
     def js_custom_escape
-      # TODO: Figure out how to configure this
-      escape_function = nil 
+      escape_function = self.class.custom_escape
       escape_function ? "'#{js_string escape_function}'" : 'null'
     end
 
     class << self
+      attr_accessor :custom_escape
+
       def haml_source
         # Haml source is an asset
         @haml_source ||= IO.read File.expand_path('../../../vendor/assets/javascripts/haml.js', __FILE__) 
       end
+
     end
 
   end

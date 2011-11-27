@@ -18,6 +18,13 @@ describe RubyHamlJs::Template do
 
     it { should include "function (locals) {" }
     it { should include 'function html_escape' }
+
+    context "with custom HTML escape function" do
+      before { @original_escape = RubyHamlJs::Template.custom_escape }
+      before { RubyHamlJs::Template.custom_escape = "App.custom_escape" }
+      after  { RubyHamlJs::Template.custom_escape = @original_escape }
+      it { should include "App.custom_escape(" }
+    end
   end
 
   describe 'executing' do
