@@ -85,6 +85,14 @@ RubyHamlJs::Template.custom_escape = "App.escape_html"
 This will use the given function and will not generate custom escape code inside each template.
 But you need to make sure that the function is defined before using the templates in JavaScript.
 
+## Custom haml.js
+
+If you need a custom version of haml.js library you may specify it using the haml_path
+
+```ruby
+RubyHamlJs::Template.haml_path = "path/to/haml.js"
+```
+
 # Development
 
 - Source hosted at [GitHub](https://github.com/dnagir/ruby-haml-js)
