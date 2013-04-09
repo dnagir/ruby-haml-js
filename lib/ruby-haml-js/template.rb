@@ -50,10 +50,12 @@ module RubyHamlJs
 
     class << self
       attr_accessor :custom_escape
+      attr_accessor :haml_path
 
       def haml_source
         # Haml source is an asset
-        @haml_source ||= IO.read File.expand_path('../../../vendor/assets/javascripts/haml.js', __FILE__) 
+        @haml_path = File.expand_path('../../../vendor/assets/javascripts/haml.js', __FILE__) if @haml_path.nil?
+        @haml_source ||= IO.read @haml_path
       end
 
     end
