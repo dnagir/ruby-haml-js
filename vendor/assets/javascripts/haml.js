@@ -1,5 +1,5 @@
 var Haml;
- 
+
 (function () {
 
   var matchers, self_close_tags, embedder, forceXML, escaperName, escapeHtmlByDefault;
@@ -159,7 +159,7 @@ var Haml;
         //unsafe!!!
         items.push(match[2] || match[3]);
       }
-      
+
       pos += next;
     }
     return items.filter(function (part) { return part && part.length > 0}).join(" +\n");
@@ -194,7 +194,7 @@ var Haml;
             var leader0 = attribs._content.charAt(0),
                 leader1 = attribs._content.charAt(1),
                 leaderLength = 0;
-                
+
             if(leader0 == "<"){
               leaderLength++;
               whitespace.inside = true;
@@ -251,7 +251,7 @@ var Haml;
         if (content === '""') {
           content = '';
         }
-        
+
         if(whitespace.inside){
           if(content.length==0){
             content='"  "'
@@ -260,7 +260,7 @@ var Haml;
               content = '" '+JSON.parse(content)+' "';
             }catch(e){
               content = '" "+\n'+content+'+\n" "';
-            }            
+            }
           }
         }
 
@@ -271,7 +271,7 @@ var Haml;
         } else {
           output = '"<' + tag + attribs + ' />"';
         }
-        
+
         if(whitespace.around){
           //output now contains '"<b>hello</b>"'
           //we need to crack it open to insert whitespace.
@@ -318,7 +318,7 @@ var Haml;
           '} else { return ""; } }).call(this)';
       }
     },
-    
+
     // else if statements
     {
       name: "else if",
@@ -340,7 +340,7 @@ var Haml;
           '} else { return ""; } }).call(this)';
       }
     },
-    
+
     // else statements
     {
       name: "else",
@@ -359,7 +359,7 @@ var Haml;
           '} else { return ""; } }).call(this)';
       }
     },
-    
+
     // silent-comments
     {
       name: "silent-comments",
@@ -368,25 +368,34 @@ var Haml;
         return '""';
       }
     },
-    
+
     //html-comments
     {
       name: "silent-comments",
       regexp: /^(\s*)\/\s*(.*)\s*$/i,
       process: function () {
         this.contents.unshift(this.matches[2]);
-        
+
         return '"<!--'+this.contents.join('\\n')+'-->"';
       }
     },
-    
+
     // raw js
     {
       name: "rawjs",
       regexp: /^(\s*)-\s*(.*)\s*$/i,
       process: function () {
-        this.contents.unshift(this.matches[2]);
-        return '"";' + this.contents.join("\n")+"; _$output = _$output ";
+        contents = ["_$output = _$output + "+ compile(this.contents.join("\n"))];
+        if (this.matches[2].match(/{$/))
+          contents.push(';}');
+        else if(this.matches[2].match(/^if|^for|^while/)) {
+          contents.unshift('{');
+          contents.push(';}');
+        }
+        if (this.matches[2].match(/function/))
+          contents.push(')');
+        contents.unshift(this.matches[2]);
+        return '"";\n' + contents.join("\n")+"; _$output = _$output ";
       }
     },
 
@@ -399,7 +408,7 @@ var Haml;
         return '"<pre>"+\n' + JSON.stringify(this.contents.join("\n"))+'+\n"</pre>"';
       }
     },
-    
+
     // declarations
     {
       name: "doctype",
@@ -535,7 +544,7 @@ var Haml;
           }
         }
       });
-      
+
       // Match plain text
       if (!found) {
         output.push(function () {
@@ -552,7 +561,7 @@ var Haml;
               return escaperName+'(' + line + ')';
             }
           }
-          
+
           function unescapedLine(){
             try {
               return parse_interpol(JSON.parse(line));
@@ -560,19 +569,19 @@ var Haml;
               return line;
             }
           }
-          
+
           // always escaped
           if((line.substr(0, 2) === "&=")) {
             line = line.substr(2, line.length).trim();
             return escapedLine();
           }
-          
+
           //never escaped
           if((line.substr(0, 2) === "!=")) {
             line = line.substr(2, line.length).trim();
             return unescapedLine();
           }
-          
+
           // sometimes escaped
           if ( (line[0] === '=')) {
             line = line.substr(1, line.length).trim();
@@ -592,7 +601,7 @@ var Haml;
     if (block) {
       output.push(block.process());
     }
-    
+
     var txt = output.filter(function (part) { return part && part.length > 0}).join(" +\n");
     if(txt.length == 0){
       txt = '""';
@@ -659,7 +668,7 @@ var Haml;
       forceXML = config;
       config = {};
     }
-    
+
     var escaper;
     if(config.customEscape){
       escaper = "";
@@ -668,11 +677,11 @@ var Haml;
       escaper = html_escape.toString() + "\n";
       escaperName = "html_escape";
     }
-    
+
     escapeHtmlByDefault = (config.escapeHtmlByDefault || config.escapeHTML || config.escape_html);
-    
+
     var js = optimize(compile(haml));
-    
+
     var str = "with(locals || {}) {\n" +
     "  try {\n" +
     "   var _$output=" + js + ";\n return _$output;" +
