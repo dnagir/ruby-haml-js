@@ -385,8 +385,17 @@ var Haml;
       name: "rawjs",
       regexp: /^(\s*)-\s*(.*)\s*$/i,
       process: function () {
-        this.contents.unshift(this.matches[2]);
-        return '"";' + this.contents.join("\n")+"; _$output = _$output ";
+        contents = ["_$output = _$output + "+ compile(this.contents.join("\n"))];
+        if (this.matches[2].match(/{$/))
+          contents.push(';}');
+        else if(this.matches[2].match(/^if|^for|^while/)) {
+          contents.unshift('{');
+          contents.push(';}');
+        }
+        if (this.matches[2].match(/function/))
+          contents.push(')');
+        contents.unshift(this.matches[2]);
+        return '"";\n' + contents.join("\n")+"; _$output = _$output ";
       }
     },
 
